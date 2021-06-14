@@ -1,0 +1,45 @@
+<DOCTYPE! html>
+
+<html>
+    <head>
+        <text>
+            this is head <br>
+        </text>
+    </head>
+
+    <body>
+        <text>
+            Click to send message
+        </text>
+        <button onClick='sendMessage()'>
+            Send
+        </button>
+        <script>
+            const socket = new WebSocket('ws://localhost:8080', 'server-client-protocol');
+            
+            socket.addEventListener('open', function (event){
+                return
+            });
+
+            socket.addEventListener('message', function (event) {
+                const eventData = JSON.parse(event.data);
+                if(eventData.type === 'connection') {
+                    console.log(eventData.message);
+                } else {
+                    console.log(Object.keys(eventData));
+                }
+            });
+
+            const sendMessage = () => {
+                socket.send('Hello bro');
+            }
+
+        </script>
+    </body>
+
+    <footer>
+        <text>
+            this is footer
+        </text>
+    </footer>
+</html>
