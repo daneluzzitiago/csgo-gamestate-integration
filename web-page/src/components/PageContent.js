@@ -1,22 +1,24 @@
 import React from 'react';
 import { Col, Divider, Layout, Row, Typography } from 'antd';
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-
-import ctLogo from '../imgs/logo_CT_csgo.png';
-import trLogo from '../imgs/logo_TR_csgo.png';
-
 import EconomyChart from './EconomyChart';
+import PlayerStatistics from './PlayerStatistics';
 
 const { Content } = Layout;
-const { Text, Title } = Typography
+const { Title } = Typography
 
 export default class PageContent extends React.Component {
     state = {
         economy: [],
+        kills: [],
     }
 
     updateEconomy(economy) {
         this.setState({ economy });
+    }
+
+    updateKills(kills) {
+        console.log(kills);
+        this.setState({ kills });
     }
 
     render() {
@@ -26,9 +28,8 @@ export default class PageContent extends React.Component {
             return
         });
 
-        const callUpdateEconomy = (economy) => {
-            this.updateEconomy(economy);
-        }
+        const callUpdateEconomy = (economy) => this.updateEconomy(economy);
+        const callUpdateKills = (kills) => this.updateKills(kills);
         
         socket.addEventListener('message', function (event) {
             const eventData = JSON.parse(event.data);
@@ -36,6 +37,8 @@ export default class PageContent extends React.Component {
                 console.log(eventData.message);
             } else if (eventData.type === 'economy'){
                 callUpdateEconomy(eventData.payload);
+            } else if (eventData.type === 'kill'){
+                callUpdateKills(eventData.payload);
             }
         });
         
@@ -53,6 +56,14 @@ export default class PageContent extends React.Component {
                         <Col span={20}>
                             <EconomyChart 
                                 economy={this.state.economy}
+                            />
+                        </Col>
+                    </Row>
+                    <Divider orientation='left'>Estatística de Jogadores</Divider>
+                    <Row justify={'center'}>
+                        <Col span={20}>
+                            <PlayerStatistics
+                                kills={this.state.kills}
                             />
                         </Col>
                     </Row>

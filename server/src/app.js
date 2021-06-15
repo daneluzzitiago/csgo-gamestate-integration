@@ -133,6 +133,12 @@ function checkGameEvents(gameState) {
                         }
                         console.log(kill);
                         kills.push(kill);
+                        const killMessage = {
+                            type: 'kill',
+                            message: 'Economy data array from server',
+                            payload: kills,
+                        }
+                        connection.send(JSON.stringify(killMessage));
                     };
                 }
             };

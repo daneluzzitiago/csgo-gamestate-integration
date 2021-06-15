@@ -15,7 +15,7 @@ export default class EconomyChart extends React.Component {
         const { economy } = this.props;
 
         return (
-            <ResponsiveContainer width="95%" height={200}>
+            <ResponsiveContainer width={'100%'} height={200}>
                 <LineChart data={economy}>
                     <Line type="monotone" dataKey="CTValue" stroke="#0000ff" name="Economia CT" />
                     <Line type="monotone" dataKey="TValue" stroke="#ff0000" name="Economia TR"/>
