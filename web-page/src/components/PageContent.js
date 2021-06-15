@@ -1,5 +1,11 @@
 import React from 'react';
 import { Col, Divider, Layout, Row, Typography } from 'antd';
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+
+import ctLogo from '../imgs/logo_CT_csgo.png';
+import trLogo from '../imgs/logo_TR_csgo.png';
+
+import EconomyChart from './EconomyChart';
 
 const { Content } = Layout;
 const { Text, Title } = Typography
@@ -20,8 +26,7 @@ export default class PageContent extends React.Component {
             return
         });
 
-        const teste = (economy) => {
-            console.log('teste: ', economy);
+        const callUpdateEconomy = (economy) => {
             this.updateEconomy(economy);
         }
         
@@ -30,7 +35,7 @@ export default class PageContent extends React.Component {
             if(eventData.type === 'connection') {
                 console.log(eventData.message);
             } else if (eventData.type === 'economy'){
-                teste(eventData.payload);
+                callUpdateEconomy(eventData.payload);
             }
         });
         
@@ -42,17 +47,17 @@ export default class PageContent extends React.Component {
                         <Col span={8} />
                         <Col span={8}>
                             <Title level={2}>Economia</Title>
-                            {this.state.economy.map(e => (
-                                <div key={e.round}>
-                                    <Text>{'Round ' + e.round + ' - CT: ' + e.CTValue + ' T: ' + e.TValue}</Text>
-                                </div>
-                            ))}
                         </Col>
-                        <Col span={8} />
+                    </Row>
+                    <Row justify={'center'}>
+                        <Col span={20}>
+                            <EconomyChart 
+                                economy={this.state.economy}
+                            />
+                        </Col>
                     </Row>
                 </Content>
             </Layout>
-            
         );
     }
 }
