@@ -2,7 +2,7 @@ import React from 'react';
 import { Col, Divider, Layout, Row, Typography } from 'antd';
 import EconomyChart from './EconomyChart';
 import PlayerStatistics from './PlayerStatistics';
-import WeaponPie from './WeaponPie';
+import HeatMap from './HeatMap';
 
 const { Content } = Layout;
 const socket = new WebSocket('ws://localhost:8080', 'server-client-protocol');
@@ -29,7 +29,6 @@ export default class PageContent extends React.Component {
                 updateKills(eventData.payload);
             } else if (eventData.type === 'death'){
                 updateDeaths(eventData.payload);
-                console.log('ALGUEM MORREU')
             }
         });
     }    
@@ -51,14 +50,15 @@ export default class PageContent extends React.Component {
                         <Col span={20}>
                             <PlayerStatistics
                                 kills={this.state.kills}
-                                deaths={this.state.deaths}
                             />
                         </Col>
                     </Row>
-                    <Divider orientation='left'>Essa merda que nao funciona</Divider>
+                    <Divider orientation='left'>Heatmap de Deaths</Divider>
                     <Row justify='center'>
-                        <Col span={20}>
-                            <WeaponPie />
+                        <Col>
+                            <HeatMap 
+                                deaths={this.state.deaths}
+                            />
                         </Col>
                     </Row>
                 </Content>

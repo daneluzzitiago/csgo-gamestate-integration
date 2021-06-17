@@ -3,7 +3,7 @@ import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContai
 
 export default class PlayerStatistics extends React.Component {
     state = {
-        mappedKils: [
+        mappedKills: [
             {
                 when: '> 120s',
                 total: 0
@@ -97,7 +97,7 @@ export default class PlayerStatistics extends React.Component {
                     kills_111_120++;
                 }
             });
-            const mappedKils = [
+            const mappedKills = [
                 {
                     when: '> 120s',
                     total: kills_111_120
@@ -147,15 +147,14 @@ export default class PlayerStatistics extends React.Component {
                     total: kills_0_10,
                 },
             ];
-            this.setState({ mappedKils })
+            this.setState({ mappedKills })
         }
-        console.log(this.state.mappedKils);
     }
 
     render() {
         return (
             <ResponsiveContainer width={'100%'} height={200}>
-                <LineChart data={this.state.mappedKils}>
+                <LineChart data={this.state.mappedKills}>
                     <Line 
                         type="monotone" 
                         dataKey="total" 
@@ -165,7 +164,6 @@ export default class PlayerStatistics extends React.Component {
                     />
                     <CartesianGrid stroke="#ccc" width='100%' />
                     <XAxis dataKey="when" />
-                        {/* ticks={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]} /> */}
                     <YAxis type="number" />
                     <Tooltip />
                 </LineChart>
