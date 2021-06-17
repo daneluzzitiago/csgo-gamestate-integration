@@ -113,8 +113,13 @@ function checkGameEvents(gameState) {
                             round: gameState.phase_countdowns.phase === OVER ? gameState.map.round - 1 : gameState.map.round,
                             weapons: playerWeapons,
                         }
-                        console.log(death);
                         deaths.push(death);
+                        const deathMessage = {
+                            type: 'death',
+                            message: 'Economy data array from server',
+                            payload: deaths,
+                        }
+                        connection.send(JSON.stringify(deathMessage));
                     };
                     
                     // Kills
@@ -131,7 +136,6 @@ function checkGameEvents(gameState) {
                             head_shot: isHeadShot,
                             weapons: playerWeapons,
                         }
-                        console.log(kill);
                         kills.push(kill);
                         const killMessage = {
                             type: 'kill',
@@ -146,7 +150,6 @@ function checkGameEvents(gameState) {
         
         updateData(gameState);
     } else if (roundChangeTrigger && current_phase === FREEZE) {
-        console.log('Iniciando round', gameState.map.round);
         
         getPlayersId(gameState.allplayers);
 
@@ -171,27 +174,20 @@ function checkGameEvents(gameState) {
             round: gameState.map.round,
         }
         economyValue.push(roundEconomy);
-        console.log(economyValue);
         const economyMessage = {
             type: 'economy',
             message: 'Economy data array from server',
             payload: economyValue,
         }
         connection.send(JSON.stringify(economyMessage));
-        console.log('Enviei para o front ', economyMessage);
-        for(var index in playersId){
-            console.log(gameState.allplayers[playersId[index]].name);
-        }
         
         resetData();
     };
     
     if (gameState.map.phase === GAMEOVER) {
-        console.log('The game is over.');
         gameIsOver = true;
         getFinalScore();
-        console.log(kills);
-        console.log(deaths);
+    }
 };
 
 function getFinalScore() {
@@ -236,9 +232,6 @@ function getFinalScore() {
         }
         
         finalScore[nameIndex].deaths++;
-    }
-    
-    console.log(finalScore);
     }
 }
 

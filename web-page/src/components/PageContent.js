@@ -2,69 +2,63 @@ import React from 'react';
 import { Col, Divider, Layout, Row, Typography } from 'antd';
 import EconomyChart from './EconomyChart';
 import PlayerStatistics from './PlayerStatistics';
+import WeaponPie from './WeaponPie';
 
 const { Content } = Layout;
-const { Title } = Typography
+const socket = new WebSocket('ws://localhost:8080', 'server-client-protocol');
 
 export default class PageContent extends React.Component {
     state = {
         economy: [],
         kills: [],
+        deaths: [],
     }
+    
+    componentDidMount() {
+        const updateEconomy = (payload) => this.setState({ economy: payload });
+        const updateKills = (payload) => this.setState({ kills: payload });
+        const updateDeaths = (payload) => this.setState({ deaths: payload });
 
-    updateEconomy(economy) {
-        this.setState({ economy });
-    }
-
-    updateKills(kills) {
-        console.log(kills);
-        this.setState({ kills });
-    }
-
-    render() {
-        const socket = new WebSocket('ws://localhost:8080', 'server-client-protocol');
-        
-        socket.addEventListener('open', function (event){
-            return
-        });
-
-        const callUpdateEconomy = (economy) => this.updateEconomy(economy);
-        const callUpdateKills = (kills) => this.updateKills(kills);
-        
         socket.addEventListener('message', function (event) {
             const eventData = JSON.parse(event.data);
             if(eventData.type === 'connection') {
                 console.log(eventData.message);
             } else if (eventData.type === 'economy'){
-                callUpdateEconomy(eventData.payload);
+                updateEconomy(eventData.payload);
             } else if (eventData.type === 'kill'){
-                callUpdateKills(eventData.payload);
+                updateKills(eventData.payload);
+            } else if (eventData.type === 'death'){
+                updateDeaths(eventData.payload);
+                console.log('ALGUEM MORREU')
             }
         });
-        
+    }    
+
+    render() {
         return(
             <Layout>
                 <Content style={{ padding: '0 50px' }}>
-                    <Divider orientation='left'>Conteúdo</Divider>
-                    <Row gutter={40}>
-                        <Col span={8} />
-                        <Col span={8}>
-                            <Title level={2}>Economia</Title>
-                        </Col>
-                    </Row>
-                    <Row justify={'center'}>
+                    <Divider orientation='left'>Economia</Divider>
+                    <Row justify='center'>
                         <Col span={20}>
                             <EconomyChart 
                                 economy={this.state.economy}
                             />
                         </Col>
                     </Row>
-                    <Divider orientation='left'>Estatística de Jogadores</Divider>
-                    <Row justify={'center'}>
+                    <Divider orientation='left'>Tempo de morte</Divider>
+                    <Row justify='center'>
                         <Col span={20}>
                             <PlayerStatistics
                                 kills={this.state.kills}
+                                deaths={this.state.deaths}
                             />
+                        </Col>
+                    </Row>
+                    <Divider orientation='left'>Essa merda que nao funciona</Divider>
+                    <Row justify='center'>
+                        <Col span={20}>
+                            <WeaponPie />
                         </Col>
                     </Row>
                 </Content>

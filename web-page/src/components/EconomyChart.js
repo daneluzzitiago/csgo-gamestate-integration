@@ -1,12 +1,5 @@
 import React from 'react';
-import { Col, Divider, Layout, Row, Typography } from 'antd';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-
-import ctLogo from '../imgs/logo_CT_csgo.png';
-import trLogo from '../imgs/logo_TR_csgo.png';
-
-const { Content } = Layout;
-const { Text, Title } = Typography
 
 export default class EconomyChart extends React.Component {
     state = {}
